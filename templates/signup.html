@@ -7,11 +7,11 @@
 {% block body_class %}flex items-center justify-center{% endblock %}
 
 {% block content %}
-<main class="w-full max-w-[600px] flex flex-col gap-sm p-6">
+<main class="w-full max-w-[600px] mx-auto flex flex-col gap-sm p-6">
     <!-- Logo Branding Header -->
     <div class="flex items-center justify-between mb-sm">
         <a href="{% url 'landing' %}" class="no-underline">
-            <h1 class="font-display-xl text-display-xl tracking-tighter italic uppercase text-on-surface">LOCKEDIN</h1>
+            <h1 class="font-display-xl text-headline-lg md:text-display-xl tracking-tighter italic uppercase text-on-surface">LOCKEDIN</h1>
         </a>
         <div class="flex gap-xs">
             <div class="w-8 h-8 bg-[#33FF00] border-2 border-black"></div>
@@ -26,7 +26,7 @@
         </div>
 
         <header class="flex flex-col gap-xs">
-            <h2 class="font-headline-lg text-headline-lg uppercase leading-none">JOIN THE GRID</h2>
+            <h2 class="font-headline-lg text-headline-md md:text-headline-lg uppercase leading-none">JOIN THE GRID</h2>
             <p class="font-body-lg text-body-lg text-outline">Create your account. Start locking in.</p>
         </header>
 
