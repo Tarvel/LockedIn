@@ -5,6 +5,7 @@ urlpatterns = [
     # Landing & generation
     path("", views.landing_page, name="landing"),
     path("generate/", views.generate_roadmap_view, name="generate_roadmap"),
+    path("generate/run/", views.generate_run, name="generate_run"),
     path("loading/", views.loading_screen, name="loading"),
 
     # Auth

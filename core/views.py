@@ -10,6 +10,7 @@ Handles:
   - Guest → authenticated roadmap hand-off
 """
 
+import threading
 import uuid
 
 from django.contrib import messages
@@ -19,6 +20,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from .models import NodeProgress, ProjectProgress, Roadmap, Streak
@@ -34,16 +36,16 @@ def landing_page(request):
 
 
 # ---------------------------------------------------------------------------
-# Roadmap Generation (stub — actual AI call handled elsewhere)
+# Roadmap Generation — 2-step flow
 # ---------------------------------------------------------------------------
+# 1. Form POST  → store input in session → redirect to /loading/
+# 2. Loading page → HTMX GET /generate/run/ → blocks until AI done → HX-Redirect
+# ---------------------------------------------------------------------------
+
 
 def generate_roadmap_view(request):
     """
-    Accepts conversational input from the landing page (e.g. "I wanna get
-    good at Python"), calls the AI pipeline, then saves the roadmap.
-
-    The AI pipeline handles parsing the natural language into structured
-    params (skill, user_level, goal, time_commitment, etc.).
+    Step 1: Accepts form POST, stores input in session, redirects to loading.
     """
     if request.method != "POST":
         return redirect("landing")
@@ -53,22 +55,38 @@ def generate_roadmap_view(request):
         messages.error(request, "Tell us what you want to learn!")
         return redirect("landing")
 
-    # ----- AI generation -----
-    # The real pipeline accepts the raw conversational string and returns
-    # the full roadmap schema documented in ai.json.
+    # Store input in session and redirect to the loading screen
+    request.session["pending_user_input"] = user_input
+    return redirect(f"/loading/?skill={user_input}")
+
+
+def generate_run(request):
+    """
+    Step 2: HTMX GET — does the actual AI generation synchronously.
+    Blocks until the AI returns, creates the Roadmap, and sends HX-Redirect.
+    """
+    user_input = request.session.get("pending_user_input", "")
+    print(f"[GENERATE] session={request.session.session_key}, input={user_input!r}")
+
+    if not user_input:
+        from django.http import JsonResponse
+        return JsonResponse({"redirect": "/"})
+
+    # Call the AI (this blocks for ~1-60s)
     try:
         from .ai import generate_roadmap as ai_generate
         roadmap_data = ai_generate(user_input)
+        print(f"[GENERATE] AI returned successfully")
     except Exception as e:
-        # Fallback demo data if AI API is unavailable / misconfigured
         import traceback
         print(f"\n[AI ERROR] {type(e).__name__}: {e}")
         traceback.print_exc()
-        print()
         roadmap_data = _demo_roadmap(user_input)
 
-    # The AI returns { "success": true, "data": { ... } }
-    # If wrapped in the envelope, unwrap it
+    # Clean up session
+    request.session.pop("pending_user_input", None)
+
+    # Unwrap the AI envelope
     if "data" in roadmap_data and "phases" in roadmap_data.get("data", {}):
         data = roadmap_data["data"]
     elif "phases" in roadmap_data:
@@ -76,14 +94,12 @@ def generate_roadmap_view(request):
     else:
         data = roadmap_data
 
-    # Normalize: the AI uses `project` (singular object) per phase.
-    # Convert to `projects` (array) for consistent template rendering.
+    # Normalize: singular `project` → `projects` array
     phases = data.get("phases", [])
     for phase in phases:
         if "project" in phase and "projects" not in phase:
             phase["projects"] = [phase["project"]]
 
-    # Extract the display skill name from the AI response
     skill_display = data.get("skill", user_input)
     overview = data.get("overview", "")
     estimated_duration = data.get("estimated_total_duration", "")
@@ -99,10 +115,13 @@ def generate_roadmap_view(request):
     )
 
     if not request.user.is_authenticated:
-        # Store in session so we can hand it off on signup
         request.session["guest_roadmap_id"] = str(roadmap.id)
 
-    return redirect("roadmap_detail", roadmap_id=roadmap.id)
+    print(f"[GENERATE] Roadmap created: {roadmap.id}")
+
+    # Return JSON with the redirect URL
+    from django.http import JsonResponse
+    return JsonResponse({"redirect": f"/roadmap/{roadmap.id}/"})
 
 
 # ---------------------------------------------------------------------------

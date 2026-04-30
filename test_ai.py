@@ -13,7 +13,7 @@ AI_API_URL = os.environ.get("AI_API_URL", "").rstrip("/")
 URL = f"{AI_API_URL}/api/v1/roadmaps/generate"
 
 payload = {
-    "skill": "Python",
+    "skill": "read faster",
     "user_level": "complete beginner",
     "goal": "learn the skill step by step and build practical confidence",
     "time_commitment": "3 to 5 hours per week",
@@ -35,6 +35,7 @@ def timer():
         sys.stdout.flush()
         time.sleep(1)
 
+start_time = time.time()
 t = threading.Thread(target=timer, daemon=True)
 t.start()
 
@@ -46,7 +47,7 @@ try:
         timeout=120,
     )
     stop_timer.set()
-    print(f"\r✅ Response received in {time.time() - t._started.timestamp() if hasattr(t, '_started') else '?'}s")
+    print(f"\r✅ Response received in {time.time() - start_time:.1f}s")
     print(f"\nSTATUS: {resp.status_code}")
     print(f"HEADERS: {dict(resp.headers)}\n")
     print(f"RESPONSE BODY:\n{resp.text[:3000]}")
