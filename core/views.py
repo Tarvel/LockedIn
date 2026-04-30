@@ -59,8 +59,12 @@ def generate_roadmap_view(request):
     try:
         from .ai import generate_roadmap as ai_generate
         roadmap_data = ai_generate(user_input)
-    except ImportError:
-        # Fallback demo data for development / hackathon demo
+    except Exception as e:
+        # Fallback demo data if AI API is unavailable / misconfigured
+        import traceback
+        print(f"\n[AI ERROR] {type(e).__name__}: {e}")
+        traceback.print_exc()
+        print()
         roadmap_data = _demo_roadmap(user_input)
 
     # The AI returns { "success": true, "data": { ... } }

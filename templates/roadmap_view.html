@@ -22,7 +22,7 @@
                 </div>
                 <div>
                     <div class="font-['Inter'] font-black uppercase text-sm">{{ user.username|truncatechars:12 }}</div>
-                    <div class="text-[10px] font-bold text-zinc-500 uppercase">BUILDER</div>
+                    <div class="text-[10px] font-bold text-zinc-500 uppercase">LEARNER</div>
                 </div>
             </div>
             {% endif %}
@@ -172,10 +172,10 @@
                             <div class="bg-tertiary text-white border-4 border-black p-8 neo-shadow transition-transform hover:-translate-y-1 cursor-pointer">
                                 <div class="flex justify-between items-start mb-6">
                                     <div>
-                                        <div class="font-label-mono text-sm mb-2 bg-black text-white inline-block px-3 py-1">MILESTONE PROJECT</div>
+                                        <div class="font-label-mono text-sm mb-2 bg-black text-white inline-block px-3 py-1">MILESTONE CHALLENGE</div>
                                         <h3 class="font-headline-md text-3xl">{{ project.title|upper }}</h3>
                                     </div>
-                                    <span class="material-symbols-outlined text-5xl">rocket_launch</span>
+                                    <span class="material-symbols-outlined text-5xl">emoji_events</span>
                                 </div>
                                 <p class="font-body-lg mb-4 opacity-90">{{ project.brief }}</p>
                                 {% if project.tools_needed or project.tools %}
@@ -202,7 +202,7 @@
                                         {% if project.id in completed_projects %}
                                         ✅ COMPLETED
                                         {% else %}
-                                        START PROJECT
+                                        MARK COMPLETE
                                         {% endif %}
                                     </button>
                                     {% else %}
@@ -232,11 +232,11 @@
                     <div class="space-y-4">
                         <div class="flex items-center gap-4">
                             <div class="w-3 h-3 bg-black"></div>
-                            <span class="font-label-mono">{{ roadmap.total_nodes }} TOTAL NODES</span>
+                            <span class="font-label-mono">{{ roadmap.total_nodes }} TOTAL STEPS</span>
                         </div>
                         <div class="flex items-center gap-4">
                             <div class="w-3 h-3 bg-[#33FF00]"></div>
-                            <span class="font-label-mono">{{ roadmap.total_projects }} PROJECTS</span>
+                            <span class="font-label-mono">{{ roadmap.total_projects }} MILESTONES</span>
                         </div>
                         <div class="flex items-center gap-4">
                             <div class="w-3 h-3 bg-secondary-container"></div>
@@ -249,7 +249,7 @@
                 <!-- Guest CTA Card -->
                 <div class="bg-[#33FF00] border-4 border-black p-6 neo-shadow">
                     <h4 class="font-headline-md text-xl mb-4 uppercase">SAVE YOUR PROGRESS</h4>
-                    <p class="font-body-md mb-4">Create a free account to track nodes, build your streak, and save this roadmap.</p>
+                    <p class="font-body-md mb-4">Create a free account to track progress, build your streak, and save this roadmap.</p>
                     <a href="{% url 'signup' %}" class="block w-full bg-black text-[#33FF00] text-center border-4 border-black font-headline-md py-4 neo-shadow-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all uppercase no-underline">
                         SIGN UP FREE
                     </a>

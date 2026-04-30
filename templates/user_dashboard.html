@@ -12,7 +12,7 @@
                 </div>
                 <div>
                     <div class="text-xs text-black">{{ user.username|truncatechars:14 }}</div>
-                    <div class="text-[10px] text-zinc-500">BUILDER</div>
+                    <div class="text-[10px] text-zinc-500">LEARNER</div>
                 </div>
             </div>
             <a href="{% url 'landing' %}" class="w-full bg-[#33FF00] neo-border-sm py-2 text-sm neo-shadow-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all active:scale-95 block text-center no-underline text-black">CREATE NEW</a>
@@ -80,7 +80,7 @@
                 <div>
                     <h3 class="font-headline-md text-xl uppercase mb-1">{{ card.roadmap.skill_name }}</h3>
                     <p class="text-xs text-zinc-500 font-label-mono mb-4">
-                        {{ card.completed_count }} / {{ card.total_nodes }} NODES COMPLETE
+                        {{ card.completed_count }} / {{ card.total_nodes }} STEPS COMPLETE
                     </p>
                     <div class="flex items-center gap-4 py-4 border-y-2 border-black border-dashed">
                         <div class="relative w-16 h-16 flex items-center justify-center">
@@ -141,7 +141,7 @@
             <div class="md:col-span-4 bg-[#FFD100] neo-border p-6 neo-shadow flex flex-col justify-between">
                 <div>
                     <h3 class="font-headline-md text-xl uppercase italic mb-2">LEVEL</h3>
-                    <div class="text-4xl font-black italic">BUILDER</div>
+                    <div class="text-4xl font-black italic">LEARNER</div>
                 </div>
                 <a href="{% url 'landing' %}" class="w-full bg-black text-[#FFD100] py-2 font-black uppercase text-xs hover:translate-x-[2px] hover:translate-y-[2px] transition-all block text-center no-underline mt-4">NEW ROADMAP</a>
             </div>
