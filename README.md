@@ -1,5 +1,5 @@
 <p align="center">
-  <strong style="font-size:48px; letter-spacing:-2px;">🔒 LOCKEDIN</strong>
+  <strong style="font-size:48px; letter-spacing:-2px;">LOCKEDIN</strong>
 </p>
 
 <h3 align="center">AI-powered roadmap generator for <em>any</em> skill on the planet.</h3>
@@ -259,7 +259,7 @@ If you can learn it, LockedIn can map it.
 
 ---
 
-## 📄 License
+## License
 
 This project was built for a hackathon. License TBD.
 
