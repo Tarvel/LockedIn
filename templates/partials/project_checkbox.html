@@ -1,0 +1,14 @@
+{# HTMX partial: swapped into #project-{project_id} after toggling completion #}
+<button
+    hx-post="{% url 'toggle_project' %}"
+    hx-vals='{"roadmap_id": "{{ roadmap.id }}", "project_id": "{{ project_id }}"}'
+    hx-target="#project-{{ project_id }}"
+    hx-swap="innerHTML"
+    class="w-full bg-white text-black border-4 border-black font-headline-md py-4 neo-shadow-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all uppercase"
+>
+    {% if completed %}
+    ✅ COMPLETED
+    {% else %}
+    START PROJECT
+    {% endif %}
+</button>

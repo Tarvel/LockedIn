@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>{% block title %}LOCKEDIN — LOCK IN YOUR FUTURE{% endblock %}</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+
+    <!-- HTMX CSRF Configuration -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.addEventListener('htmx:configRequest', function(event) {
+                // Get CSRF token from the cookie
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value
+                    || document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='))?.split('=')[1];
+                if (csrfToken) {
+                    event.detail.headers['X-CSRFToken'] = csrfToken;
+                }
+            });
+        });
+    </script>
+
+    <!-- Shared Tailwind Config -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#b6c4ff",
+                        "on-primary-fixed": "#231b00",
+                        "surface-tint": "#725c00",
+                        "tertiary": "#bd0049",
+                        "on-tertiary-container": "#b90048",
+                        "outline-variant": "#d1c6ab",
+                        "inverse-on-surface": "#f9f0dd",
+                        "outline": "#7f765f",
+                        "surface-container-highest": "#ebe2cf",
+                        "surface-bright": "#fff8f0",
+                        "secondary-container": "#0356ff",
+                        "surface-container-high": "#f0e7d5",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#e4e7ff",
+                        "secondary-fixed": "#dce1ff",
+                        "primary-fixed-dim": "#edc200",
+                        "surface-variant": "#ebe2cf",
+                        "surface-container-low": "#fcf3e0",
+                        "primary": "#725c00",
+                        "surface": "#fff8f0",
+                        "on-tertiary-fixed": "#400013",
+                        "on-surface-variant": "#4d4632",
+                        "surface-dim": "#e2d9c7",
+                        "tertiary-fixed": "#ffd9dd",
+                        "secondary": "#0041c9",
+                        "on-primary-container": "#6f5a00",
+                        "on-primary-fixed-variant": "#564500",
+                        "inverse-primary": "#edc200",
+                        "tertiary-fixed-dim": "#ffb2bd",
+                        "on-error": "#ffffff",
+                        "surface-container": "#f6eddb",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#001551",
+                        "primary-fixed": "#ffe07f",
+                        "on-secondary-fixed-variant": "#0039b3",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#ffc8cf",
+                        "on-tertiary-fixed-variant": "#900036",
+                        "primary-container": "#ffd100",
+                        "on-surface": "#1f1b10",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#353024",
+                        "on-secondary": "#ffffff",
+                        "background": "#fff8f0",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#1f1b10"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "80px",
+                        "shadow-offset": "8px",
+                        "border-width": "4px",
+                        "md": "32px",
+                        "xs": "8px",
+                        "sm": "16px",
+                        "unit": "4px",
+                        "lg": "48px"
+                    },
+                    "fontFamily": {
+                        "label-mono": ["Space Grotesk"],
+                        "body-md": ["Space Grotesk"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Space Grotesk"],
+                        "headline-lg": ["Inter"],
+                        "display-xl": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-mono": ["14px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                        "headline-md": ["32px", {"lineHeight": "1.2", "fontWeight": "900"}],
+                        "body-lg": ["20px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                        "headline-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "900"}],
+                        "display-xl": ["80px", {"lineHeight": "1.0", "letterSpacing": "-0.04em", "fontWeight": "900"}]
+                    }
+                },
+            },
+        }
+    </script>
+
+    <!-- Shared Styles -->
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neo-shadow { box-shadow: 8px 8px 0px 0px #000000; }
+        .neo-shadow-sm { box-shadow: 4px 4px 0px 0px #000000; }
+        .neo-shadow-button { box-shadow: 6px 6px 0px 0px #000000; }
+        .neo-shadow-button:hover { transform: translate(4px, 4px); box-shadow: 0px 0px 0px 0px #000000; }
+        .neo-shadow-active { box-shadow: 2px 2px 0px 0px #000000; transform: translate(2px, 2px); }
+        .neo-shadow-input:focus-within { box-shadow: 4px 4px 0px 0px #33FF00; }
+        .neo-border { border: 4px solid #000000; }
+        .neo-border-sm { border: 2px solid #000000; }
+        .btn-hover:hover { transform: translate(4px, 4px); box-shadow: 0px 0px 0px 0px #000000; }
+        .neo-btn-hover:hover { transform: translate(4px, 4px); box-shadow: 0px 0px 0px 0px #000000; }
+        .roadmap-line { position: absolute; left: 12px; top: 0; bottom: 0; width: 4px; background: black; z-index: 0; }
+
+        /* Auth modal overlay */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 100;
+            background: rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen {% block body_class %}{% endblock %}" hx-boost="true">
+    {% block header %}
+    <!-- TopAppBar -->
+    <header class="flex justify-between items-center w-full px-6 h-20 sticky top-0 z-50 bg-[#FFFFFF] dark:bg-zinc-900 border-b-4 border-black dark:border-white shadow-[4px_4px_0px_0px_#000000]">
+        <div class="flex items-center gap-8">
+            <a href="{% url 'landing' %}" class="text-2xl font-black italic tracking-tighter text-black dark:text-white font-['Inter'] uppercase no-underline">LOCKEDIN</a>
+            <nav class="hidden md:flex gap-6">
+                <a class="font-['Inter'] font-black uppercase tracking-tighter text-zinc-500 dark:text-zinc-400 hover:translate-x-[2px] hover:translate-y-[2px] transition-all no-underline" href="{% url 'landing' %}">ROADMAPS</a>
+            </nav>
+        </div>
+        <div class="flex items-center gap-4">
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="font-['Inter'] font-black uppercase tracking-tighter bg-[#FFD100] text-black px-4 py-2 border-2 border-black neo-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all no-underline">DASHBOARD</a>
+                <a href="{% url 'logout' %}" class="font-['Inter'] font-black uppercase tracking-tighter text-zinc-500 hover:translate-x-[2px] hover:translate-y-[2px] transition-all no-underline" hx-boost="false">LOGOUT</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="font-['Inter'] font-black uppercase tracking-tighter text-zinc-500 hover:translate-x-[2px] hover:translate-y-[2px] transition-all no-underline">LOGIN</a>
+                <a href="{% url 'signup' %}" class="font-['Inter'] font-black uppercase tracking-tighter bg-[#FFD100] text-black px-4 py-2 border-2 border-black neo-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all no-underline">SIGN UP</a>
+            {% endif %}
+        </div>
+    </header>
+    {% endblock %}
+
+    {% block sidebar %}{% endblock %}
+
+    <!-- Flash Messages -->
+    {% if messages %}
+    <div class="fixed top-24 right-6 z-[60] space-y-2" id="flash-messages">
+        {% for message in messages %}
+        <div class="bg-{% if message.tags == 'error' %}tertiary{% elif message.tags == 'success' %}[#33FF00]{% else %}primary-container{% endif %} text-{% if message.tags == 'error' %}white{% else %}black{% endif %} border-4 border-black px-6 py-3 neo-shadow-sm font-label-mono text-sm uppercase animate-bounce"
+             onclick="this.remove()">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    <script>setTimeout(() => { const el = document.getElementById('flash-messages'); if(el) el.remove(); }, 5000);</script>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+    {% block bottom_nav %}
+    <!-- BottomNavBar (Mobile Only) -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full h-16 flex justify-around items-center bg-white dark:bg-black border-t-4 border-black z-50 font-['Inter'] font-bold text-[10px] uppercase">
+        <a class="flex flex-col items-center justify-center text-black dark:text-white h-full w-full hover:bg-zinc-100 no-underline" href="{% url 'landing' %}">
+            <span class="material-symbols-outlined">home</span>
+            <span>HOME</span>
+        </a>
+        {% if user.is_authenticated %}
+        <a class="flex flex-col items-center justify-center text-black dark:text-white h-full w-full hover:bg-zinc-100 no-underline" href="{% url 'dashboard' %}">
+            <span class="material-symbols-outlined">grid_view</span>
+            <span>DASHBOARD</span>
+        </a>
+        {% else %}
+        <a class="flex flex-col items-center justify-center text-black dark:text-white h-full w-full hover:bg-zinc-100 no-underline" href="{% url 'signup' %}">
+            <span class="material-symbols-outlined">person_add</span>
+            <span>SIGN UP</span>
+        </a>
+        {% endif %}
+    </nav>
+    {% endblock %}
+
+    <!-- Hidden CSRF token for HTMX -->
+    {% csrf_token %}
+
+    <!-- HTMX modal target -->
+    <div id="auth-modal"></div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

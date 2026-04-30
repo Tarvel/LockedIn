@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block title %}LOCKEDIN — DASHBOARD{% endblock %}
+
+{% block content %}
+<div class="flex">
+    <!-- SideNavBar -->
+    <aside class="hidden md:flex flex-col fixed left-0 top-20 h-[calc(100vh-5rem)] z-40 bg-[#FFFFFF] dark:bg-zinc-900 border-r-4 border-black w-64 shadow-[8px_0px_0px_0px_#000000] font-['Inter'] font-black uppercase">
+        <div class="p-6 border-b-4 border-black">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 neo-border bg-secondary-container flex items-center justify-center overflow-hidden">
+                    <span class="material-symbols-outlined text-white">person</span>
+                </div>
+                <div>
+                    <div class="text-xs text-black">{{ user.username|truncatechars:14 }}</div>
+                    <div class="text-[10px] text-zinc-500">BUILDER</div>
+                </div>
+            </div>
+            <a href="{% url 'landing' %}" class="w-full bg-[#33FF00] neo-border-sm py-2 text-sm neo-shadow-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all active:scale-95 block text-center no-underline text-black">CREATE NEW</a>
+        </div>
+        <nav class="flex-1 py-4">
+            <a class="bg-[#FFD100] text-black border-2 border-black m-2 flex items-center gap-3 p-4 no-underline" href="{% url 'dashboard' %}">
+                <span class="material-symbols-outlined">grid_view</span> DASHBOARD
+            </a>
+            <a class="text-black dark:text-white flex items-center gap-3 p-4 hover:bg-[#33FF00] hover:text-black transition-colors no-underline" href="{% url 'landing' %}">
+                <span class="material-symbols-outlined">explore</span> EXPLORE
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content Canvas -->
+    <main class="md:ml-64 p-6 md:p-10 min-h-screen flex-1">
+        <!-- PROMINENT STREAK BANNER -->
+        <section class="mb-10 w-full bg-[#FF007A] neo-border p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 neo-shadow">
+            <div class="flex items-center gap-6">
+                <div class="text-6xl md:text-8xl animate-pulse">🔥</div>
+                <div>
+                    <h1 class="font-headline-lg text-white uppercase italic leading-none m-0">
+                        {% if streak.current_streak > 0 %}
+                            {{ streak.current_streak }}-DAY STREAK
+                        {% else %}
+                            START YOUR STREAK
+                        {% endif %}
+                    </h1>
+                    <p class="font-label-mono text-white mt-2 tracking-widest">
+                        {% if streak.current_streak > 0 %}
+                            YOU ARE LOCKING IN. DON'T STOP NOW.
+                        {% else %}
+                            COMPLETE A NODE TODAY TO BEGIN.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <div class="flex gap-2">
+                    {% with "MTWTFSS" as days %}
+                    {% for day in days %}
+                    <div class="w-10 h-10 {% if forloop.counter <= streak.current_streak %}bg-[#FFD100]{% else %}bg-white/20{% endif %} neo-border-sm flex items-center justify-center font-black text-xs">{{ day }}</div>
+                    {% endfor %}
+                    {% endwith %}
+                </div>
+                <span class="text-xs text-white font-bold uppercase">
+                    LONGEST: {{ streak.longest_streak }} DAYS
+                </span>
+            </div>
+        </section>
+
+        <!-- DASHBOARD GRID -->
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="font-headline-md uppercase italic underline decoration-4 decoration-[#FFD100] underline-offset-8">ACTIVE_ROADMAPS</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for card in roadmap_cards %}
+            <div class="bg-white neo-border p-6 neo-shadow flex flex-col gap-4">
+                <div class="flex justify-between items-start">
+                    <span class="bg-[#0055FF] text-white px-2 py-1 text-[10px] font-black uppercase neo-border-sm border-2">
+                        {{ card.roadmap.phases|length }} PHASES
+                    </span>
+                </div>
+                <div>
+                    <h3 class="font-headline-md text-xl uppercase mb-1">{{ card.roadmap.skill_name }}</h3>
+                    <p class="text-xs text-zinc-500 font-label-mono mb-4">
+                        {{ card.completed_count }} / {{ card.total_nodes }} NODES COMPLETE
+                    </p>
+                    <div class="flex items-center gap-4 py-4 border-y-2 border-black border-dashed">
+                        <div class="relative w-16 h-16 flex items-center justify-center">
+                            <svg class="w-full h-full -rotate-90">
+                                <circle class="text-zinc-200" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-width="4"></circle>
+                                <circle class="text-[#FFD100]" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor"
+                                        stroke-dasharray="175.9"
+                                        stroke-dashoffset="{{ card.completion_pct|floatformat:0 }}"
+                                        stroke-width="6"
+                                        style="stroke-dashoffset: {% widthratio card.completion_pct 100 175 %}"></circle>
+                            </svg>
+                            <span class="absolute text-[10px] font-black">{{ card.completion_pct }}%</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-[10px] font-black uppercase text-zinc-500">PROGRESS</div>
+                            <div class="w-full bg-zinc-100 h-3 mt-1">
+                                <div class="bg-[#FFD100] h-full transition-all" style="width: {{ card.completion_pct }}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a href="{% url 'roadmap_detail' roadmap_id=card.roadmap.id %}" class="w-full bg-[#FFD100] neo-border py-3 font-black uppercase text-sm neo-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all block text-center no-underline text-black">CONTINUE</a>
+            </div>
+            {% empty %}
+            <!-- Empty State -->
+            <div class="bg-surface-container-low neo-border p-6 neo-shadow border-dashed flex flex-col items-center justify-center gap-4 min-h-[400px] col-span-full md:col-span-1">
+                <div class="w-20 h-20 neo-border bg-white rounded-full flex items-center justify-center border-dashed">
+                    <span class="material-symbols-outlined text-4xl text-zinc-300">add</span>
+                </div>
+                <div class="text-center">
+                    <h3 class="font-headline-md text-lg uppercase text-zinc-400">NO ROADMAPS YET</h3>
+                    <p class="text-[10px] text-zinc-400 font-label-mono mt-2">DEFINE YOUR TRAJECTORY.</p>
+                </div>
+                <a href="{% url 'landing' %}" class="mt-4 px-6 py-2 bg-white neo-border-sm font-black uppercase text-xs hover:bg-[#FFD100] transition-colors no-underline text-black">GENERATE NOW</a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Stats Row -->
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-12 gap-6 pb-24">
+            <div class="md:col-span-8 bg-white neo-border p-6 neo-shadow">
+                <h3 class="font-headline-md text-xl uppercase italic mb-6">QUICK STATS</h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-surface-bright neo-border-sm p-4 text-center">
+                        <div class="text-3xl font-black">{{ roadmap_cards|length }}</div>
+                        <div class="text-[10px] font-label-mono text-zinc-500 uppercase mt-1">ROADMAPS</div>
+                    </div>
+                    <div class="bg-surface-bright neo-border-sm p-4 text-center">
+                        <div class="text-3xl font-black">🔥{{ streak.current_streak }}</div>
+                        <div class="text-[10px] font-label-mono text-zinc-500 uppercase mt-1">CURRENT STREAK</div>
+                    </div>
+                    <div class="bg-surface-bright neo-border-sm p-4 text-center">
+                        <div class="text-3xl font-black">{{ streak.longest_streak }}</div>
+                        <div class="text-[10px] font-label-mono text-zinc-500 uppercase mt-1">LONGEST STREAK</div>
+                    </div>
+                </div>
+            </div>
+            <div class="md:col-span-4 bg-[#FFD100] neo-border p-6 neo-shadow flex flex-col justify-between">
+                <div>
+                    <h3 class="font-headline-md text-xl uppercase italic mb-2">LEVEL</h3>
+                    <div class="text-4xl font-black italic">BUILDER</div>
+                </div>
+                <a href="{% url 'landing' %}" class="w-full bg-black text-[#FFD100] py-2 font-black uppercase text-xs hover:translate-x-[2px] hover:translate-y-[2px] transition-all block text-center no-underline mt-4">NEW ROADMAP</a>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

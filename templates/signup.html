@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}LOCKEDIN — SIGN UP{% endblock %}
+
+{% block header %}{% endblock %}
+{% block bottom_nav %}{% endblock %}
+
+{% block body_class %}flex items-center justify-center{% endblock %}
+
+{% block content %}
+<main class="w-full max-w-[600px] flex flex-col gap-sm p-6">
+    <!-- Logo Branding Header -->
+    <div class="flex items-center justify-between mb-sm">
+        <a href="{% url 'landing' %}" class="no-underline">
+            <h1 class="font-display-xl text-display-xl tracking-tighter italic uppercase text-on-surface">LOCKEDIN</h1>
+        </a>
+        <div class="flex gap-xs">
+            <div class="w-8 h-8 bg-[#33FF00] border-2 border-black"></div>
+            <div class="w-8 h-8 bg-black"></div>
+        </div>
+    </div>
+
+    <!-- Main Auth Card -->
+    <div class="bg-surface border-[4px] border-black p-lg neo-shadow flex flex-col gap-md relative overflow-hidden">
+        <div class="absolute top-0 right-0 bg-[#33FF00] px-4 py-1 text-black font-label-mono text-label-mono border-b-4 border-l-4 border-black">
+            NEW_BUILDER
+        </div>
+
+        <header class="flex flex-col gap-xs">
+            <h2 class="font-headline-lg text-headline-lg uppercase leading-none">JOIN THE GRID</h2>
+            <p class="font-body-lg text-body-lg text-outline">Create your account. Start locking in.</p>
+        </header>
+
+        <form action="{% url 'signup' %}" method="POST" class="flex flex-col gap-sm" hx-boost="false">
+            {% csrf_token %}
+            <!-- Email -->
+            <div class="flex flex-col gap-xs">
+                <label class="font-label-mono text-label-mono uppercase" for="email">AUTHENTICATION_ID (EMAIL)</label>
+                <div class="relative neo-shadow-input transition-all">
+                    <input class="w-full bg-surface-container-lowest border-[4px] border-black p-4 font-body-lg focus:ring-0 focus:outline-none placeholder:text-surface-dim"
+                           id="email" name="email" placeholder="USER@LOCKEDIN.APP" type="email" required/>
+                </div>
+            </div>
+            <!-- Password -->
+            <div class="flex flex-col gap-xs">
+                <label class="font-label-mono text-label-mono uppercase" for="password">SECURITY_KEY (PASSWORD)</label>
+                <div class="relative neo-shadow-input transition-all">
+                    <input class="w-full bg-surface-container-lowest border-[4px] border-black p-4 font-body-lg focus:ring-0 focus:outline-none placeholder:text-surface-dim"
+                           id="password" name="password" placeholder="MINIMUM 8 CHARACTERS" type="password" required/>
+                </div>
+            </div>
+            <!-- Submit -->
+            <div class="flex flex-col gap-sm mt-sm">
+                <button class="w-full bg-[#33FF00] text-black py-6 border-[4px] border-black font-display-xl text-headline-md neo-shadow-button transition-all uppercase flex items-center justify-center gap-sm" type="submit">
+                    CREATE ACCOUNT
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+                </button>
+                <div class="flex items-center justify-between font-label-mono text-label-mono uppercase mt-xs">
+                    <span class="text-surface-dim">ALREADY A BUILDER?</span>
+                    <a class="hover:underline decoration-4 decoration-primary-container underline-offset-4" href="{% url 'login' %}">Lock In →</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Info banner about guest roadmap -->
+    {% if request.session.guest_roadmap_id %}
+    <div class="flex items-start gap-sm p-sm bg-primary-container text-black border-2 border-black">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bookmark</span>
+        <p class="font-label-mono text-label-mono leading-tight">
+            YOUR ROADMAP PREVIEW IS READY. SIGN UP TO SAVE IT TO YOUR ACCOUNT PERMANENTLY.
+        </p>
+    </div>
+    {% endif %}
+</main>
+{% endblock %}

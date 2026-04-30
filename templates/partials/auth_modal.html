@@ -1,0 +1,36 @@
+{# HTMX partial: auth prompt modal for guest users #}
+<div class="modal-overlay" onclick="if(event.target===this) this.remove();">
+    <div class="bg-white border-4 border-black p-8 neo-shadow max-w-md w-full mx-4 relative">
+        <!-- Close button -->
+        <button onclick="this.closest('.modal-overlay').remove();" class="absolute top-4 right-4 w-8 h-8 border-2 border-black flex items-center justify-center hover:bg-zinc-100 transition-colors">
+            <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+
+        <!-- Content -->
+        <div class="flex items-center gap-3 mb-4">
+            <span class="material-symbols-outlined text-4xl text-[#FFD100]" style="font-variation-settings: 'FILL' 1;">lock</span>
+            <h3 class="font-headline-md text-2xl uppercase">HOLD UP</h3>
+        </div>
+
+        <p class="font-body-md mb-6">
+            You need an account to track your progress, save roadmaps, and build your streak. It takes 10 seconds.
+        </p>
+
+        <div class="flex flex-col gap-3">
+            <a href="{% url 'signup' %}"
+               class="w-full bg-[#33FF00] text-black py-4 border-4 border-black font-headline-md text-center uppercase neo-shadow-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all no-underline block"
+               hx-boost="false">
+                SIGN UP FREE
+            </a>
+            <a href="{% url 'login' %}"
+               class="w-full bg-white text-black py-3 border-4 border-black font-headline-md text-center uppercase hover:bg-zinc-50 transition-colors no-underline block"
+               hx-boost="false">
+                I HAVE AN ACCOUNT
+            </a>
+        </div>
+
+        <p class="font-label-mono text-[10px] text-zinc-400 uppercase mt-4 text-center">
+            YOUR ROADMAP WILL BE SAVED AUTOMATICALLY
+        </p>
+    </div>
+</div>

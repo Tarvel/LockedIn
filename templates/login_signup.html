@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#b6c4ff",
+                    "on-primary-fixed": "#231b00",
+                    "surface-tint": "#725c00",
+                    "tertiary": "#bd0049",
+                    "on-tertiary-container": "#b90048",
+                    "outline-variant": "#d1c6ab",
+                    "inverse-on-surface": "#f9f0dd",
+                    "outline": "#7f765f",
+                    "surface-container-highest": "#ebe2cf",
+                    "surface-bright": "#fff8f0",
+                    "secondary-container": "#0356ff",
+                    "surface-container-high": "#f0e7d5",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#e4e7ff",
+                    "secondary-fixed": "#dce1ff",
+                    "primary-fixed-dim": "#edc200",
+                    "surface-variant": "#ebe2cf",
+                    "surface-container-low": "#fcf3e0",
+                    "primary": "#725c00",
+                    "surface": "#fff8f0",
+                    "on-tertiary-fixed": "#400013",
+                    "on-surface-variant": "#4d4632",
+                    "surface-dim": "#e2d9c7",
+                    "tertiary-fixed": "#ffd9dd",
+                    "secondary": "#0041c9",
+                    "on-primary-container": "#6f5a00",
+                    "on-primary-fixed-variant": "#564500",
+                    "inverse-primary": "#edc200",
+                    "tertiary-fixed-dim": "#ffb2bd",
+                    "on-error": "#ffffff",
+                    "surface-container": "#f6eddb",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed": "#001551",
+                    "primary-fixed": "#ffe07f",
+                    "on-secondary-fixed-variant": "#0039b3",
+                    "error-container": "#ffdad6",
+                    "tertiary-container": "#ffc8cf",
+                    "on-tertiary-fixed-variant": "#900036",
+                    "primary-container": "#ffd100",
+                    "on-surface": "#1f1b10",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#353024",
+                    "on-secondary": "#ffffff",
+                    "background": "#fff8f0",
+                    "error": "#ba1a1a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-background": "#1f1b10"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "80px",
+                    "shadow-offset": "8px",
+                    "border-width": "4px",
+                    "md": "32px",
+                    "xs": "8px",
+                    "sm": "16px",
+                    "unit": "4px",
+                    "lg": "48px"
+            },
+            "fontFamily": {
+                    "label-mono": ["Space Grotesk"],
+                    "body-md": ["Space Grotesk"],
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Space Grotesk"],
+                    "headline-lg": ["Inter"],
+                    "display-xl": ["Inter"]
+            },
+            "fontSize": {
+                    "label-mono": ["14px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                    "headline-md": ["32px", {"lineHeight": "1.2", "fontWeight": "900"}],
+                    "body-lg": ["20px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                    "headline-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "900"}],
+                    "display-xl": ["80px", {"lineHeight": "1.0", "letterSpacing": "-0.04em", "fontWeight": "900"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neo-shadow {
+            box-shadow: 8px 8px 0px 0px #000000;
+        }
+        .neo-shadow-button {
+            box-shadow: 6px 6px 0px 0px #000000;
+        }
+        .neo-shadow-button:hover {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px 0px #000000;
+        }
+        .neo-shadow-input:focus-within {
+            box-shadow: 4px 4px 0px 0px #33FF00;
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-background min-h-screen flex items-center justify-center p-6 selection:bg-primary-container">
+<!-- Auth Container -->
+<main class="w-full max-w-[600px] flex flex-col gap-sm">
+<!-- Logo Branding Header (Standalone for Auth) -->
+<div class="flex items-center justify-between mb-sm">
+<h1 class="font-display-xl text-display-xl tracking-tighter italic uppercase text-on-surface">
+                LOCKEDIN
+            </h1>
+<div class="flex gap-xs">
+<div class="w-8 h-8 bg-black"></div>
+<div class="w-8 h-8 bg-primary-container border-2 border-black"></div>
+</div>
+</div>
+<!-- Main oversized Auth Card -->
+<div class="bg-surface border-[4px] border-black p-lg neo-shadow flex flex-col gap-md relative overflow-hidden">
+<!-- Decorative Accent -->
+<div class="absolute top-0 right-0 bg-secondary px-4 py-1 text-on-secondary font-label-mono text-label-mono border-b-4 border-l-4 border-black">
+                ACCESS_V.02
+            </div>
+<!-- Header Section -->
+<header class="flex flex-col gap-xs">
+<h2 class="font-headline-lg text-headline-lg uppercase leading-none">
+                    READY TO GRIND?
+                </h2>
+<p class="font-body-lg text-body-lg text-outline">
+                    Sync your trajectory. Lock in your roadmap.
+                </p>
+</header>
+<!-- Form -->
+<form action="#" class="flex flex-col gap-sm" method="POST">
+<!-- Email Field -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-mono text-label-mono uppercase" for="email">AUTHENTICATION_ID (EMAIL)</label>
+<div class="relative neo-shadow-input transition-all">
+<input class="w-full bg-surface-container-lowest border-[4px] border-black p-4 font-body-lg focus:ring-0 focus:outline-none placeholder:text-surface-dim" id="email" name="email" placeholder="USER@LOCKEDIN.APP" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-mono text-label-mono uppercase" for="password">SECURITY_KEY (PASSWORD)</label>
+<div class="relative neo-shadow-input transition-all">
+<input class="w-full bg-surface-container-lowest border-[4px] border-black p-4 font-body-lg focus:ring-0 focus:outline-none placeholder:text-surface-dim" id="password" name="password" placeholder="••••••••••••" type="password"/>
+</div>
+</div>
+<!-- Action Section -->
+<div class="flex flex-col gap-sm mt-sm">
+<button class="w-full bg-primary-container text-on-primary-fixed py-6 border-[4px] border-black font-display-xl text-headline-md neo-shadow-button transition-all uppercase flex items-center justify-center gap-sm" type="submit">
+                        LOCK IN
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">arrow_forward</span>
+</button>
+<div class="flex items-center justify-between font-label-mono text-label-mono uppercase mt-xs">
+<a class="hover:underline decoration-4 decoration-primary-container underline-offset-4" href="#">Forgot Key?</a>
+<span class="text-surface-dim">|</span>
+<a class="hover:underline decoration-4 decoration-secondary underline-offset-4" href="#">Create Account</a>
+</div>
+</div>
+</form>
+<!-- Social/Secondary Login Grid -->
+<div class="grid grid-cols-2 gap-sm pt-md border-t-2 border-dashed border-black">
+<button class="border-2 border-black p-4 flex items-center justify-center gap-xs font-label-mono uppercase hover:bg-surface-variant transition-colors">
+<img alt="Google Icon" class="w-4 h-4 grayscale" data-alt="A clean, minimalist high-contrast graphic representation of a tech company icon. The style is sharp and neo-brutalist with thick black outlines and no gradients. The lighting is high-key and uniform, matching a light-mode UI aesthetic. The background is a solid off-white neutral tone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvyHl1QruHUxzm_OJp2VwyDifzS0CSgQ21IQq9rjtXTVr7aILvh-IkpEM_QS0I10ww2jPsjXkxly-r4G9LVtyirJ21BnNwGBAXT3N_x6mXUQiyeDaWhSVoNcgrHyiplzDXHi5Qi6o85Ok_uVAS1Tvs54bvOd7VK9PUiaysLot9N5R46n0fD5ApiKQJZJ8lleME0LqsBR0vqNkW36t_hVQQFCoB_NDob2qzvoF6d_wzkw-DlrZQqnvD2TU3GAg_8TFmbzltahO4P0Wf"/>
+                    GITHUB
+                </button>
+<button class="border-2 border-black p-4 flex items-center justify-center gap-xs font-label-mono uppercase hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">terminal</span>
+                    SSO
+                </button>
+</div>
+</div>
+<!-- System Message -->
+<div class="flex items-start gap-sm p-sm bg-secondary-container text-on-secondary-container border-2 border-black">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">info</span>
+<p class="font-label-mono text-label-mono leading-tight">
+                SYSTEM_UPDATE: 12,402 BUILDERS ARE CURRENTLY ACTIVE ON THE GLOBAL ROADMAP. JOIN THE GRID NOW.
+            </p>
+</div>
+<!-- Branding Image Element -->
+<div class="mt-sm w-full h-[120px] border-[4px] border-black neo-shadow overflow-hidden bg-black grayscale">
+<img alt="Cyberpunk Grid" class="w-full h-full object-cover opacity-60" data-alt="A macro photography shot of an advanced high-tech motherboard with glowing traces and geometric circuits. The aesthetic is strictly neo-brutalist with sharp angles and high contrast between deep blacks and bright yellow highlights. The lighting is dramatic and directional, creating deep shadows that emphasize the physical texture of the hardware components. The overall mood is focused, technological, and intense." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAmDDU_tZZioLYOqzzn73Tlark5U3HilGtuPqVrFC8Yr3_9bbYZFUJQDpuUsQU0jvSVakQBYMsKKuhqybgS4j-wL7JoFZywRDdFc0ZzdfQWd3d9Fe-k9T5yzAKqqj0fmat_HdGXO81npokiqLK_e6ezIrmYT6rjkkpjrZx7POEw2kNyVVqPFlGjP8kF7ABgjf-P76HoEpJNge0qEyFxtEMLbByCwh6O7RgsA1PJ8Ula6z1bLgHUyCVLdrmTvLJ46SFzU5yhnP6NjVC"/>
+</div>
+</main>
+</body></html>

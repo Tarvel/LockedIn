@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}LOCKEDIN — GENERATING...{% endblock %}
+
+{% block header %}
+<header class="flex justify-between items-center w-full px-6 h-20 fixed top-0 z-50 bg-white border-b-4 border-black neo-shadow-sm">
+    <a href="{% url 'landing' %}" class="text-2xl font-black italic tracking-tighter text-black no-underline">LOCKEDIN</a>
+    <div class="hidden md:flex gap-8">
+        <span class="font-headline-md text-zinc-500 text-sm">PREPARING ENGINE...</span>
+    </div>
+    <div class="flex gap-4">
+        <span class="material-symbols-outlined text-black">settings</span>
+    </div>
+</header>
+{% endblock %}
+
+{% block bottom_nav %}{% endblock %}
+
+{% block extra_head %}
+<style>
+    @keyframes brutal-spin {
+        0% { transform: rotate(0deg); }
+        25% { transform: rotate(90deg); }
+        50% { transform: rotate(180deg); }
+        75% { transform: rotate(270deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .animate-brutal-spin {
+        animation: brutal-spin 1.2s steps(4) infinite;
+    }
+</style>
+{% endblock %}
+
+{% block body_class %}bg-[#33FF00] flex flex-col overflow-hidden{% endblock %}
+
+{% block content %}
+<main class="flex-grow flex flex-col items-center justify-center p-6 text-center">
+    <div class="relative mb-12">
+        <div class="absolute inset-0 bg-black translate-x-2 translate-y-2"></div>
+        <div class="w-40 h-40 md:w-56 md:h-56 bg-white border-4 border-black flex items-center justify-center animate-brutal-spin relative z-10">
+            <div class="w-1/2 h-1/2 border-4 border-black bg-[#FFD100]"></div>
+            <div class="absolute top-0 left-0 w-4 h-4 bg-black"></div>
+            <div class="absolute bottom-0 right-0 w-4 h-4 bg-black"></div>
+        </div>
+        <div class="absolute -top-10 -right-20 hidden md:block bg-white border-2 border-black px-4 py-2 font-label-mono text-sm neo-shadow-sm">COMPILING NODES</div>
+        <div class="absolute -bottom-12 -left-24 hidden md:block bg-secondary-container text-white border-2 border-black px-4 py-2 font-label-mono text-sm neo-shadow-sm">CALIBRATING FOCUS</div>
+    </div>
+    <div class="max-w-4xl px-4">
+        <h1 class="font-headline-lg text-black uppercase mb-6 leading-tight">
+            AI IS CRAFTING<br/>
+            <span class="bg-black text-[#33FF00] px-4 inline-block">YOUR PATH...</span>
+        </h1>
+        <p class="font-body-lg text-black max-w-xl mx-auto mb-10">
+            Generating a high-trajectory roadmap for <strong>{{ skill|upper }}</strong>. Stand by for maximum output.
+        </p>
+        <div class="w-full max-w-md mx-auto h-8 bg-white border-4 border-black p-1 neo-shadow-sm mb-4">
+            <div class="h-full bg-[#0055FF] w-3/4 border-r-4 border-black"></div>
+        </div>
+        <div class="font-label-mono text-black uppercase tracking-widest text-xs">
+            INJECTING NEURAL ARCHITECTURE
+        </div>
+    </div>
+</main>
+<footer class="fixed bottom-0 w-full h-12 bg-black text-white flex items-center px-6 font-label-mono text-[10px] uppercase tracking-[0.2em] justify-between z-50">
+    <div>SYSTEM STATUS: OPTIMAL</div>
+    <div class="flex items-center gap-4">
+        <span class="flex items-center gap-1"><span class="w-2 h-2 bg-[#33FF00]"></span>LATENCY: 24MS</span>
+        <span class="hidden md:inline">VERSION 2.4.0-STABLE</span>
+    </div>
+</footer>
+{% endblock %}

@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+{% block title %}LOCKEDIN — {{ roadmap.skill_name|upper }}{% endblock %}
+
+{% block extra_head %}
+<style>
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 700, 'GRAD' 0, 'opsz' 48;
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="flex">
+    <!-- SideNavBar (Desktop) -->
+    <aside class="hidden md:flex flex-col fixed left-0 top-20 h-[calc(100vh-80px)] z-40 bg-[#FFFFFF] dark:bg-zinc-900 border-r-4 border-black dark:border-white w-64 shadow-[8px_0px_0px_0px_#000000]">
+        <div class="p-6 border-b-4 border-black">
+            {% if user.is_authenticated %}
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 border-4 border-black bg-secondary-container flex items-center justify-center">
+                    <span class="material-symbols-outlined text-white text-2xl">person</span>
+                </div>
+                <div>
+                    <div class="font-['Inter'] font-black uppercase text-sm">{{ user.username|truncatechars:12 }}</div>
+                    <div class="text-[10px] font-bold text-zinc-500 uppercase">BUILDER</div>
+                </div>
+            </div>
+            {% endif %}
+            <a href="{% url 'landing' %}" class="w-full bg-[#33FF00] border-4 border-black p-3 font-['Inter'] font-black uppercase shadow-[4px_4px_0px_0px_#000000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all block text-center no-underline text-black">CREATE NEW</a>
+        </div>
+        <nav class="flex-1 py-4">
+            {% if user.is_authenticated %}
+            <a class="text-black dark:text-white flex items-center gap-3 p-4 hover:bg-[#33FF00] hover:text-black transition-colors font-['Inter'] font-black uppercase no-underline" href="{% url 'dashboard' %}">
+                <span class="material-symbols-outlined">grid_view</span> DASHBOARD
+            </a>
+            {% endif %}
+            <a class="bg-[#FFD100] text-black border-2 border-black m-2 flex items-center gap-3 p-4 font-['Inter'] font-black uppercase no-underline" href="#">
+                <span class="material-symbols-outlined">explore</span> EXPLORE
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 md:ml-64 p-6 md:p-12 pb-32 bg-surface">
+        <!-- Progress Header -->
+        <div class="mb-12">
+            <div class="flex justify-between items-end mb-4">
+                <div>
+                    <h1 class="font-headline-lg text-headline-lg uppercase">{{ roadmap.skill_name }}</h1>
+                    {% if roadmap.estimated_duration %}
+                    <span class="font-label-mono text-label-mono text-zinc-500 mt-1 inline-block">EST. {{ roadmap.estimated_duration|upper }}</span>
+                    {% endif %}
+                </div>
+                <span class="font-label-mono text-label-mono bg-black text-white px-4 py-1">TRACK_ID: {{ roadmap.id|truncatechars:8 }}</span>
+            </div>
+            {% if roadmap.overview %}
+            <p class="font-body-md text-zinc-600 mb-6 max-w-3xl">{{ roadmap.overview }}</p>
+            {% endif %}
+            <!-- Progress Bar (HTMX-swappable) -->
+            <div id="progress-bar" class="w-full bg-white border-border-width border-black h-16 neo-shadow relative flex items-center overflow-hidden">
+                <div class="h-full bg-secondary-container border-r-4 border-black flex items-center justify-center transition-all duration-500" style="width: {{ completion_pct }}%;">
+                    <span class="font-headline-md text-white px-4">{{ completion_pct }}% COMPLETE</span>
+                </div>
+                {% if completion_pct < 100 %}
+                <div class="flex-1 flex items-center justify-end px-6">
+                    <span class="font-headline-md text-black opacity-20 italic">LOCKED IN...</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Roadmap Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Phases Timeline -->
+            <div class="lg:col-span-8 space-y-12">
+                {% for phase in roadmap.phases %}
+                <section>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 bg-black text-white flex items-center justify-center font-headline-md">{{ forloop.counter }}</div>
+                        <h2 class="font-headline-md uppercase">{{ phase.title }}</h2>
+                    </div>
+                    {% if phase.goal or phase.estimated_duration %}
+                    <div class="flex flex-wrap items-center gap-3 mb-8 ml-16">
+                        {% if phase.estimated_duration %}
+                        <span class="font-label-mono text-xs border-2 border-black px-2 py-0.5 bg-[#FFD100]">{{ phase.estimated_duration|upper }}</span>
+                        {% endif %}
+                        {% if phase.level %}
+                        <span class="font-label-mono text-xs border-2 border-black px-2 py-0.5 bg-tertiary-container">{{ phase.level|upper }}</span>
+                        {% endif %}
+                        {% if phase.goal %}
+                        <span class="font-body-md text-zinc-500 text-sm">{{ phase.goal }}</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    <div class="relative pl-12 space-y-8">
+                        <div class="roadmap-line"></div>
+
+                        {% for node in phase.nodes %}
+                        <div class="relative">
+                            <!-- Timeline dot -->
+                            <div class="absolute -left-[44px] top-6 w-6 h-6 border-4 border-black z-10 {% if node.id in completed_nodes %}bg-[#33FF00]{% else %}bg-[#FFD100]{% endif %}"></div>
+                            <!-- Node Card -->
+                            <div class="bg-white border-4 border-black p-6 neo-shadow flex gap-6 items-start">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        {% if node.estimated_completion_time %}
+                                        <span class="font-label-mono text-xs border-2 border-black px-2 py-0.5 bg-tertiary-container">{{ node.estimated_completion_time|upper }}</span>
+                                        {% elif node.estimated_time %}
+                                        <span class="font-label-mono text-xs border-2 border-black px-2 py-0.5 bg-tertiary-container">{{ node.estimated_time|upper }}</span>
+                                        {% endif %}
+                                        {% if node.type %}
+                                        <span class="font-label-mono text-xs border-2 border-black px-2 py-0.5">{{ node.type|upper }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <h3 class="font-headline-md text-xl mb-2">{{ node.title }}</h3>
+                                    <p class="text-zinc-600 font-body-md">{{ node.description }}</p>
+                                    {% if node.resources %}
+                                    <div class="mt-3 flex flex-wrap gap-2">
+                                        {% for resource in node.resources %}
+                                        <a href="{{ resource.url }}" target="_blank" class="text-xs font-label-mono text-secondary underline underline-offset-2 no-underline hover:underline">{{ resource.title }}</a>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Checkbox (HTMX-powered) -->
+                                <div id="node-{{ node.id }}">
+                                    {% if user.is_authenticated %}
+                                    <button
+                                        hx-post="{% url 'toggle_node' %}"
+                                        hx-vals='{"roadmap_id": "{{ roadmap.id }}", "node_id": "{{ node.id }}"}'
+                                        hx-target="#node-{{ node.id }}"
+                                        hx-swap="innerHTML"
+                                        class="w-16 h-16 border-4 border-black flex items-center justify-center cursor-pointer active:scale-90 transition-transform {% if node.id in completed_nodes %}bg-secondary-container{% else %}bg-white{% endif %}"
+                                    >
+                                        {% if node.id in completed_nodes %}
+                                        <span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1;">check_box</span>
+                                        {% else %}
+                                        <span class="material-symbols-outlined text-black text-4xl">check_box_outline_blank</span>
+                                        {% endif %}
+                                    </button>
+                                    {% else %}
+                                    <!-- Guest: show modal prompt -->
+                                    <button
+                                        hx-get="{% url 'guest_auth_check' %}"
+                                        hx-target="#auth-modal"
+                                        hx-swap="innerHTML"
+                                        class="w-16 h-16 border-4 border-black bg-white flex items-center justify-center cursor-pointer active:scale-90 transition-transform"
+                                    >
+                                        <span class="material-symbols-outlined text-black text-4xl">check_box_outline_blank</span>
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <!-- Phase Projects -->
+                        {% for project in phase.projects %}
+                        <div class="relative mt-12">
+                            <div class="absolute -left-[50px] top-1/2 -translate-y-1/2 w-10 h-10 border-4 border-black bg-tertiary rotate-45 z-10"></div>
+                            <div class="bg-tertiary text-white border-4 border-black p-8 neo-shadow transition-transform hover:-translate-y-1 cursor-pointer">
+                                <div class="flex justify-between items-start mb-6">
+                                    <div>
+                                        <div class="font-label-mono text-sm mb-2 bg-black text-white inline-block px-3 py-1">MILESTONE PROJECT</div>
+                                        <h3 class="font-headline-md text-3xl">{{ project.title|upper }}</h3>
+                                    </div>
+                                    <span class="material-symbols-outlined text-5xl">rocket_launch</span>
+                                </div>
+                                <p class="font-body-lg mb-4 opacity-90">{{ project.brief }}</p>
+                                {% if project.tools_needed or project.tools %}
+                                <div class="flex flex-wrap gap-2 mb-6">
+                                    {% for tool in project.tools_needed %}
+                                    <span class="bg-white/20 border-2 border-white/40 px-3 py-1 font-label-mono text-xs">{{ tool }}</span>
+                                    {% endfor %}
+                                    {% for tool in project.tools %}
+                                    <span class="bg-white/20 border-2 border-white/40 px-3 py-1 font-label-mono text-xs">{{ tool }}</span>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+
+                                <!-- Project Checkbox -->
+                                <div id="project-{{ project.id }}">
+                                    {% if user.is_authenticated %}
+                                    <button
+                                        hx-post="{% url 'toggle_project' %}"
+                                        hx-vals='{"roadmap_id": "{{ roadmap.id }}", "project_id": "{{ project.id }}"}'
+                                        hx-target="#project-{{ project.id }}"
+                                        hx-swap="innerHTML"
+                                        class="w-full bg-white text-black border-4 border-black font-headline-md py-4 neo-shadow-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all uppercase"
+                                    >
+                                        {% if project.id in completed_projects %}
+                                        ✅ COMPLETED
+                                        {% else %}
+                                        START PROJECT
+                                        {% endif %}
+                                    </button>
+                                    {% else %}
+                                    <button
+                                        hx-get="{% url 'guest_auth_check' %}"
+                                        hx-target="#auth-modal"
+                                        hx-swap="innerHTML"
+                                        class="w-full bg-white text-black border-4 border-black font-headline-md py-4 neo-shadow-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all uppercase"
+                                    >
+                                        SIGN UP TO TRACK
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </section>
+                {% endfor %}
+            </div>
+
+            <!-- Right Sidebar Stats -->
+            <div class="lg:col-span-4 space-y-8">
+                <!-- Current Focus Widget -->
+                <div class="bg-primary-container border-4 border-black p-6 neo-shadow">
+                    <h4 class="font-headline-md text-xl mb-4 uppercase">ROADMAP INFO</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-3 h-3 bg-black"></div>
+                            <span class="font-label-mono">{{ roadmap.total_nodes }} TOTAL NODES</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-3 h-3 bg-[#33FF00]"></div>
+                            <span class="font-label-mono">{{ roadmap.total_projects }} PROJECTS</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-3 h-3 bg-secondary-container"></div>
+                            <span class="font-label-mono">{{ roadmap.phases|length }} PHASES</span>
+                        </div>
+                    </div>
+                </div>
+
+                {% if not user.is_authenticated %}
+                <!-- Guest CTA Card -->
+                <div class="bg-[#33FF00] border-4 border-black p-6 neo-shadow">
+                    <h4 class="font-headline-md text-xl mb-4 uppercase">SAVE YOUR PROGRESS</h4>
+                    <p class="font-body-md mb-4">Create a free account to track nodes, build your streak, and save this roadmap.</p>
+                    <a href="{% url 'signup' %}" class="block w-full bg-black text-[#33FF00] text-center border-4 border-black font-headline-md py-4 neo-shadow-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all uppercase no-underline">
+                        SIGN UP FREE
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Listen for HTMX responses that include progress bar updates
+    document.body.addEventListener('htmx:afterSwap', function(evt) {
+        // If the swap target is a node checkbox, also update the progress bar
+        if (evt.detail.target.id && evt.detail.target.id.startsWith('node-')) {
+            // Extract the new completion percentage from a data attribute in the response
+            const responseEl = evt.detail.target.querySelector('[data-completion-pct]');
+            if (responseEl) {
+                const pct = responseEl.dataset.completionPct;
+                const bar = document.getElementById('progress-bar');
+                if (bar) {
+                    const fill = bar.querySelector('div');
+                    fill.style.width = pct + '%';
+                    fill.querySelector('span').textContent = pct + '% COMPLETE';
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

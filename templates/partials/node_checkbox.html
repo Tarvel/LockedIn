@@ -1,0 +1,15 @@
+{# HTMX partial: swapped into #node-{node_id} after toggling completion #}
+<button
+    hx-post="{% url 'toggle_node' %}"
+    hx-vals='{"roadmap_id": "{{ roadmap.id }}", "node_id": "{{ node_id }}"}'
+    hx-target="#node-{{ node_id }}"
+    hx-swap="innerHTML"
+    class="w-16 h-16 border-4 border-black flex items-center justify-center cursor-pointer active:scale-90 transition-transform {% if completed %}bg-secondary-container{% else %}bg-white{% endif %}"
+    data-completion-pct="{{ completion_pct }}"
+>
+    {% if completed %}
+    <span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1, 'wght' 700;">check_box</span>
+    {% else %}
+    <span class="material-symbols-outlined text-black text-4xl" style="font-variation-settings: 'wght' 700;">check_box_outline_blank</span>
+    {% endif %}
+</button>
