@@ -5,7 +5,6 @@
     hx-target="#node-{{ node_id }}"
     hx-swap="innerHTML"
     class="w-16 h-16 border-4 border-black flex items-center justify-center cursor-pointer active:scale-90 transition-transform {% if completed %}bg-secondary-container{% else %}bg-white{% endif %}"
-    data-completion-pct="{{ completion_pct }}"
 >
     {% if completed %}
     <span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1, 'wght' 700;">check_box</span>
@@ -13,3 +12,25 @@
     <span class="material-symbols-outlined text-black text-4xl" style="font-variation-settings: 'wght' 700;">check_box_outline_blank</span>
     {% endif %}
 </button>
+
+{# Out-of-band swap: also update the progress bar without a full reload #}
+<div id="progress-bar" hx-swap-oob="true" class="w-full bg-white border-border-width border-black h-16 neo-shadow relative flex items-center overflow-hidden">
+    {% if completion_pct > 0 %}
+    <div class="h-full bg-secondary-container {% if completion_pct < 100 %}border-r-4 border-black{% endif %} flex items-center justify-center transition-all duration-500" style="width: {{ completion_pct }}%; min-width: 120px;">
+        <span class="font-headline-md text-white px-4 whitespace-nowrap">{{ completion_pct }}%</span>
+    </div>
+    {% endif %}
+    {% if completion_pct == 0 %}
+    <div class="flex-1 flex items-center justify-center px-6">
+        <span class="font-headline-md text-black opacity-30 uppercase">0% — START LOCKING IN</span>
+    </div>
+    {% elif completion_pct < 100 %}
+    <div class="flex-1 flex items-center justify-end px-6">
+        <span class="font-headline-md text-black opacity-20 italic">LOCKED IN...</span>
+    </div>
+    {% else %}
+    <div class="absolute inset-0 flex items-center justify-center">
+        <span class="font-headline-md text-white px-4">100% COMPLETE 🔥</span>
+    </div>
+    {% endif %}
+</div>

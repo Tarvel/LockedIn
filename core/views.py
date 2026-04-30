@@ -341,7 +341,7 @@ def toggle_project_progress(request):
 def guest_auth_check(request):
     """
     HTMX endpoint hit when an unauthenticated user clicks a node.
-    Returns the signup prompt modal partial.
+    Returns the signup prompt modal partial.    
     """
     if request.user.is_authenticated:
         return HttpResponse("")  # no-op if somehow called while logged in

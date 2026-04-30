@@ -58,12 +58,22 @@
             {% endif %}
             <!-- Progress Bar (HTMX-swappable) -->
             <div id="progress-bar" class="w-full bg-white border-border-width border-black h-16 neo-shadow relative flex items-center overflow-hidden">
-                <div class="h-full bg-secondary-container border-r-4 border-black flex items-center justify-center transition-all duration-500" style="width: {{ completion_pct }}%;">
-                    <span class="font-headline-md text-white px-4">{{ completion_pct }}% COMPLETE</span>
+                {% if completion_pct > 0 %}
+                <div class="h-full bg-secondary-container {% if completion_pct < 100 %}border-r-4 border-black{% endif %} flex items-center justify-center transition-all duration-500" style="width: {{ completion_pct }}%; min-width: 120px;">
+                    <span class="font-headline-md text-white px-4 whitespace-nowrap">{{ completion_pct }}%</span>
                 </div>
-                {% if completion_pct < 100 %}
+                {% endif %}
+                {% if completion_pct == 0 %}
+                <div class="flex-1 flex items-center justify-center px-6">
+                    <span class="font-headline-md text-black opacity-30 uppercase">0% — START LOCKING IN</span>
+                </div>
+                {% elif completion_pct < 100 %}
                 <div class="flex-1 flex items-center justify-end px-6">
                     <span class="font-headline-md text-black opacity-20 italic">LOCKED IN...</span>
+                </div>
+                {% else %}
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="font-headline-md text-white px-4">100% COMPLETE 🔥</span>
                 </div>
                 {% endif %}
             </div>
@@ -249,26 +259,4 @@
         </div>
     </main>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    // Listen for HTMX responses that include progress bar updates
-    document.body.addEventListener('htmx:afterSwap', function(evt) {
-        // If the swap target is a node checkbox, also update the progress bar
-        if (evt.detail.target.id && evt.detail.target.id.startsWith('node-')) {
-            // Extract the new completion percentage from a data attribute in the response
-            const responseEl = evt.detail.target.querySelector('[data-completion-pct]');
-            if (responseEl) {
-                const pct = responseEl.dataset.completionPct;
-                const bar = document.getElementById('progress-bar');
-                if (bar) {
-                    const fill = bar.querySelector('div');
-                    fill.style.width = pct + '%';
-                    fill.querySelector('span').textContent = pct + '% COMPLETE';
-                }
-            }
-        }
-    });
-</script>
 {% endblock %}
